@@ -12,7 +12,7 @@ const database = './database.json';
 app.get('/', (req, res) => {
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data)
@@ -25,7 +25,7 @@ app.get('/:id', (req, res) => {
     let id = req.params.id;
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data).filter(element => element.id.toString() == id)
@@ -37,7 +37,7 @@ app.delete('/delete-task/:id', (req, res) => {
     let id = req.params.id;
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data);
@@ -59,7 +59,7 @@ app.delete('/delete-task/:id', (req, res) => {
                 res.json({ status: "failed", message: "Nepavyko irasyti failo su istrintu id" })
                 return
             } else {
-                res.json({ status: "success", message: "Uzduotis su nurodytu id sekmingai istrinta, ir irasyta" })
+                res.json({ status: "success", message: "Uzduotis sekmingai istrinta" })
             }
         })
     })
@@ -77,7 +77,7 @@ app.put('/edit-todo/:id', (req, res) => {
 
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data);
@@ -92,7 +92,7 @@ app.put('/edit-todo/:id', (req, res) => {
                 res.json({ status: "failed", message: "Nepavyko irasyti atnaujinimo" })
                 return
             }
-            res.json({ status: "sucess", message: "Atnaujinimas sekmingai irasytas" })
+            res.json({ status: "sucess", message: "Uzduotis atnaujinta" })
         })
 
 
@@ -108,7 +108,7 @@ app.delete('/mass-delete', (req, res) => {
 
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data);
@@ -122,7 +122,7 @@ app.delete('/mass-delete', (req, res) => {
                 res.json({ status: "failed", message: "Nepavyko irasyti failo su istrintu id" })
                 return
             } else {
-                res.json({ status: "success", message: "Uzduotis su nurodytu id sekmingai istrinta, ir irasyta" })
+                res.json({ status: "success", message: "Uzduotys sekmingai istrintos" })
             }
         })
     })
@@ -133,7 +133,7 @@ app.put('/mark-done/:id', (req, res) => {
     let id = req.params.id;
     readFile(database, 'utf8', (err, data) => {
         if (err) {
-            res.json({ status: "failed", message: "nepavyko nuskaityti failo" })
+            res.json({ status: "failed", message: "Nepavyko nuskaityti failo" })
             return
         }
         data = JSON.parse(data);

@@ -1,5 +1,22 @@
 const url = 'http://localhost:5001/'
 const progressBar = document.querySelector('.progress-bar')
+const inputBar = document.querySelector('#new-todo');
+const messageArea = document.querySelector('.messages')
+
+const messageDisplay = (status, message) => {
+    let className = 'alert-danger'
+    if (status == 'success') {
+        className = 'alert-success'
+    }
+    messageArea.classList.remove('alert-success', 'alert-danger')
+    messageArea.classList.add(className)
+    messageArea.style.display = 'flex'
+    messageArea.innerHTML = message
+    setTimeout(() => {
+        messageArea.style.display = 'none'
+    }, 5000)
+}
+
 
 const getData = (id = '') => {
 
@@ -39,7 +56,6 @@ const getData = (id = '') => {
                 document.querySelectorAll('.mark-done').forEach(element => {
                     element.addEventListener('click', (e) => {
                         let id = e.target.parentElement.parentElement.getAttribute('data-id')
-                        console.log(id)
                         doFetch(url + 'mark-done/' + id, 'PUT', getData)
                     })
                 })
@@ -68,7 +84,6 @@ const getData = (id = '') => {
                 editBtn.setAttribute('data-id', id)
                 let todoElement = document.querySelector("#new-todo")
                 todoElement.value = data.data[0].task
-                console.log(data)
 
             } else {
                 let messages = document.querySelector('.messages')
@@ -81,7 +96,10 @@ const getData = (id = '') => {
 function doFetch(link, method, fnct) {
     fetch(link, { method })
         .then(response => response.json())
-        .then(data => fnct())
+        .then(data => {
+            messageDisplay(data.status, data.message)
+            fnct()
+        })
 }
 
 getData()
@@ -100,38 +118,36 @@ document.querySelector('#mass-delete').addEventListener('click', () => {
     })
         .then(response => response.json())
         .then(data => {
+            messageDisplay(data.status, data.message)
             getData()
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
 })
 
 
 document.querySelector('#add-new-todo').addEventListener('click', (e) => {
-    let newTask = document.querySelector('#new-todo').value
-    let messages = document.querySelector('.messages')
-    if (newTask == '') {
-        messages.style.display = 'flex'
-        messages.innerHTML = 'Ivesties langelis tuscias'
+
+
+    if (inputBar.value == '') {
+        messageDisplay(data.status, data.message)
         return
     }
-    messages.style.display = 'none'
+
     if (e.target.textContent == 'Prideti') {
         let dataURL = new URL(url + 'add-task')
-        dataURL.searchParams.append('task', newTask);
+        dataURL.searchParams.append('task', inputBar.value);
+        inputBar.value = ''
         doFetch(dataURL, 'POST', getData)
         return
     }
     if (e.target.textContent == 'Redaguoti') {
         let dataURL = new URL(url + 'edit-todo/' + e.target.getAttribute('data-id'));
         dataURL.searchParams.append('id', e.target.getAttribute('data-id'));
-        dataURL.searchParams.append('value', newTask)
+        dataURL.searchParams.append('value', inputBar.value)
+        inputBar.value = ''
         fetch(dataURL, { method: 'PUT' })
             .then(response => response.json())
             .then(data => {
-                messages.style.display = 'flex'
-                messages.innerHTML = 'Irasas sekmingai atnaujintas'
+                messageDisplay(data.status, data.message)
                 document.querySelector('#add-new-todo').textContent = 'Prideti';
                 getData()
             })
@@ -139,4 +155,5 @@ document.querySelector('#add-new-todo').addEventListener('click', (e) => {
 
 
 })
+
 
