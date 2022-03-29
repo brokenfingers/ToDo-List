@@ -93,8 +93,16 @@ const getData = (id = '') => {
         })
 }
 
-function doFetch(link, method, fnct) {
-    fetch(link, { method })
+async function doFetch(link, method, fnct, data = {}) {
+    let options = {
+        method,
+    }
+    // if (method == 'DELETE') {
+    //     options.headers = { 'Content-Type': 'application/json' }
+    //     options.body = JSON.stringify({ data })
+    // }
+
+    const resp = await fetch(link, options)
         .then(response => response.json())
         .then(data => {
             messageDisplay(data.status, data.message)
@@ -109,6 +117,9 @@ document.querySelector('#mass-delete').addEventListener('click', () => {
     document.querySelectorAll('.mass-delete:checked').forEach(element => {
         ids.push(element.parentElement.parentElement.getAttribute('data-id'))
     })
+    // console.log(ids)
+    // doFetch(url + 'mass-delete', 'DELETE', getData, { ids })
+
     fetch(url + 'mass-delete', {
         method: 'DELETE', // or 'PUT'
         headers: {
